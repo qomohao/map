@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>546&原点计划</title>
     <style>
     
     html,body{
@@ -25,15 +25,68 @@
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script>
 
-var map = new AMap.Map('container');
-var map = new AMap.Map('container', {
+
+
+// // 多个点实例组成的数组
+// var usArr = [
+//       {
+//         area:"漯河",
+//         name:"王豪",
+//         address:[114.049865,33.577845]
+//       },
+//       {
+//         area:"新密",
+//         name:"李聪园",
+//         address:[113.407163,34.536621]
+//       },
+//       {
+//         area:"南阳",
+//         name:"朱得鑫",
+//         address:[112.518406,33.002617]
+//       },
+//       {
+//         area:"安阳",
+//         name:"张引",
+//         address:[114.347761,36.110372]
+//       },
+//       {
+//         area:"焦作",
+//         name:"范文鹏",
+//         address:[113.241075,35.22922]
+//       },
+//       {
+//         area:"曹家威",
+//         name:"周口",
+//         address:[114.669561,33.584924]
+//       },
+//       {
+//         area:"梁凯",
+//         name:"商丘",
+//         address:[115.664749,34.45188]
+//       },
+//       {
+//         area:"张旭",
+//         name:"商丘",
+//         address:[115.764749,34.45188]
+//       },
+//     ];
+
+// markerList=usArr.map((v,i)=>{
+//     return new AMap.Marker({
+//                 position: new AMap.LngLat(v.address[0],v.address[1]),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+//                 title: v.name
+//             });
+// })
+// map.add(markerList);
+
+  //初始化地图对象，加载地图
+  var map =  new AMap.Map('container', {
         zoom:8,//级别
         center: [113.666486,34.755101],//中心点坐标
         viewMode:'3D',//使用3D视图，
         mapStyle:'amap://styles/6e42cce62ce626bc3ff17ce5d235f05c'
     });
-// 多个点实例组成的数组
-var usArr = [
+    var lnglats = [
       {
         area:"漯河",
         name:"王豪",
@@ -60,37 +113,35 @@ var usArr = [
         address:[113.241075,35.22922]
       },
       {
-        area:"曹家威",
-        name:"周口",
+        area:"周口",
+        name:"曹家威",
         address:[114.669561,33.584924]
       },
       {
-        area:"梁凯",
-        name:"商丘",
+        area:"商丘",
+        name:"梁凯",
         address:[115.664749,34.45188]
       },
       {
-        area:"张旭",
-        name:"商丘",
+        area:"商丘",
+        name:"张旭",
         address:[115.764749,34.45188]
       },
     ];
-
-markerList=usArr.map((v,i)=>{
-    return new AMap.Marker({
-                position: new AMap.LngLat(v.address[0],v.address[1]),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-                title: v.name
-            });
-})
-map.add(markerList);
-
-// // 创建一个 Marker 实例：
-// var marker = new AMap.Marker({
-//     position: new AMap.LngLat(116.39, 39.9),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-//     title: '北京'
-// });
-
-// // 将创建的点标记添加到已有的地图实例：
-// map.add(marker);
+    var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+    for (var i = 0, marker; i < lnglats.length; i++) {
+        var marker = new AMap.Marker({
+            position: lnglats[i].address,
+            map: map
+        });
+        marker.content = lnglats[i].name+' -- '+lnglats[i].area;
+        marker.on('click', markerClick);
+        marker.emit('click', {target: marker});
+    }
+    function markerClick(e) {
+        infoWindow.setContent(e.target.content);
+        infoWindow.open(map, e.target.getPosition());
+    }
+    map.setFitView();
 
 </script>
